@@ -7,16 +7,29 @@ path = 'C:\EchoSure\data\2015-03-04 Sierra pose validation data\transPose\';
 % for i = 1:20
 %     idx(i+1) = idx(1)+ i*30;
 % end
-trackerFileName = [path 'calPoseTransY.txt'];
-idx(1) = 49; % the 6th frame
-for i = 1:35
-    idx(i+1) = idx(1)+ i*30;
-end
+% trackerFileName = [path 'calPoseTransY.txt'];
+% idx(1) = 49; % the 6th frame
+% for i = 1:35
+%     idx(i+1) = idx(1)+ i*30;
+% end
 % trackerFileName = [path 'calPoseTransZ.txt'];
 % idx(1) = 49;
 % for i = 1:10
 %     idx(i+1) = idx(1)+ i*30;
 % end
+
+% for rotation
+% trackerFileName = [path 'calPoseRocking.txt'];
+% idx(1) = 49; 
+% for i = 1:30
+%     idx(i+1) = idx(1)+ i*30;
+% end
+
+trackerFileName = [path 'calPoseAzimuth.txt'];
+idx(1) = 49; 
+for i = 1:90
+    idx(i+1) = idx(1)+ i*30;
+end
 
 transMat = textread(trackerFileName,'%s','whitespace', '\t'); %f
 % obtain the time stamp of optical tracker
@@ -25,21 +38,41 @@ for i = 1:floor(length(transMat))
     calPose(:,:,i) = vec16ToMat(tmp(1:12));
 end
 
-calPoseMatTransX = calPose(:,:,idx(1:end-3));
-% transX = squeeze(calPoseMatTransX(1,4,:));
-transX = squeeze(calPoseMatTransX(3,4,:));
-% transX = squeeze(calPoseMatTransX(2,4,:));
-offsetX = transX(1:end-1)-transX(2:end);
-calPoseMatTransY = calPoseMatTransX;
-% calPoseMatTransZ = calPoseMatTransX;
-% mean(offsetX)
-% std(offsetX)
-mean(offsetX(1:25))
-std(offsetX(1:25))
+% for translation 
+% calPoseMatTransX = calPose(:,:,idx(1:end-3));
+% % transX = squeeze(calPoseMatTransX(1,4,:));X
+% % transX = squeeze(calPoseMatTransX(3,4,:));Y
+% % transX = squeeze(calPoseMatTransX(2,4,:));Z
+% offsetX = transX(1:end-1)-transX(2:end);
+% 
+% calPoseMatTransY = calPoseMatTransX;
+% % calPoseMatTransZ = calPoseMatTransX;
+% % mean(offsetX)
+% % std(offsetX)
+% mean(offsetX(1:25))
+% std(offsetX(1:25))
 
 % save([path 'calPoseMatTransX.mat'],'calPoseMatTransX')
-save([path 'calPoseMatTransY.mat'],'calPoseMatTransY')
+% save([path 'calPoseMatTransY.mat'],'calPoseMatTransY')
 % save([path 'calPoseMatTransZ.mat'],'calPoseMatTransZ')
+
+% for rotation
+calPoseMatRot = calPose(1:3,1:3,idx);
+for j = 1:size(calPoseMatRot,3)
+    calrod = calPoseMatRot(1:3,1:3,j);
+    [r_xyz(3),r_xyz(2), r_xyz(1)] = decompose_rotation_d(calrod);
+    rotXYZ(j,:) = r_xyz;
+end
+% rotX = rotXYZ(:,1);
+% rotDegree = rotX(2:end) - rotX(1:end-1);
+% save([path 'calPoseMatRocking.mat'],'rotX')
+
+rotY = rotXYZ(:,2);
+rotDegree = rotY(2:end) - rotY(1:end-1);
+save([path 'calPoseMatAzimuth.mat'],'rotY')
+mean(rotDegree)
+std(rotDegree)
+
 function matTrans = vec16ToMat(pts_vector)
 
 matTrans(1,1) = pts_vector(1);

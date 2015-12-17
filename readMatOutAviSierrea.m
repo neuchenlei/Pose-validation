@@ -22,8 +22,8 @@ savingPath = 'C:\EchoSure\data\2015-03-04 Sierra pose validation data\datasets\'
 % for rotation
 % fileName = [savingPath 'imageMatRotRocking.mat'];
 % saveFile = [savingPath 'imageMatRotRockingC.avi'];
-% fileName = [savingPath 'imageMatRotAzimuth.mat'];
-% saveFile = [savingPath 'imageMatRotAzimuthC.avi'];
+fileName = [savingPath 'imageMatRotAzimuth.mat'];
+saveFile = [savingPath 'imageMatRotAzimuthC.avi'];
 ims = importdata( fileName );
 
 
@@ -32,8 +32,8 @@ writerObj.FrameRate = 10;
 open(writerObj);
     
 figure, title('');
-im = uint8(ims(:,:,6));
-% im = uint8(ims(:,:,1)); % for y direction translation
+im = uint8(ims(:,:,1));
+% im = uint8(ims(:,:,6)); % for y direction translation
 
 % for z direction translation
 % im(1:150,:) = 0;
@@ -49,7 +49,7 @@ for i = 1:50
 end
 
 
-for j = 7:size(ims,3)
+for j = 2:size(ims,3) % 7
 % for j = 2:size(ims,3     
     im = uint8(ims(:,:,j));
 %     im(1:(150-j*2),:) = 0;

@@ -1,8 +1,8 @@
 function compareRot()
 
 directoryName = 'C:\EchoSure\data\2015-03-04 Sierra pose validation data\transPose\';
-% rr = dir([directoryName, '*Rocking*.mat']);
-rr = dir([directoryName, '*Azimuth*.mat']);
+rr = dir([directoryName, '*Rocking*.mat']);
+
 % tt = dir([directoryName, '*.txt']);
 
 delimiterIn = ' ';
@@ -18,11 +18,6 @@ for i = 1: size(realPose,3)
     [r_xyz(3),r_xyz(2), r_xyz(1)] = decompose_rotation_d(calrod);
     rotXYZ(i,:) = r_xyz; 
 end
-% rotX = rotXYZ(:,2);
-% rotd = rotX;
-
-rotY = rotXYZ(:,1);
-rotd = rotY;
 
 mean(rotd)
 std(rotd)
